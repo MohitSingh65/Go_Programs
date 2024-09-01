@@ -18,7 +18,7 @@ func main() {
 	var element string
 	fmt.Println("Enter key:")
 	fmt.Scanln(&element)
-//	fmt.Printf("Element for key %s is %s", element, elements[element])
+	//	fmt.Printf("Element for key %s is %s", element, elements[element])
 
 	if val, ok := elements[element]; ok {
 		fmt.Printf("Element for key %s is %s\n", element, val)
