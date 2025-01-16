@@ -7,14 +7,16 @@ import (
 
 func main() {
 	conferenceName := "Go Conference"
+	const conferenceTickets int = 50
 	var remainingTickets uint = 50
 	var userTickets uint
 	var firstName string
 	var lastName string
 	var email string
 	var bookings []string
-	fmt.Printf("Welcome to %v Ticketing System\n", conferenceName)
-	fmt.Print("Get your conference tickets here\n")
+
+	greetUsers(conferenceName, conferenceTickets, remainingTickets)
+
 	for {
 		fmt.Println("Enter your first name:")
 		fmt.Scan(&firstName)
@@ -72,4 +74,14 @@ func main() {
 		}
 
 	}
+}
+
+func greetUsers(confName string, confTickets int, remainingTickets uint) {
+	fmt.Printf("Welcome to our %v booking application\n", confName)
+	fmt.Printf(
+		"We have total of %v tickets and %v are still available.\n",
+		confTickets,
+		remainingTickets,
+	)
+	fmt.Println("Get your conference tickets here\n")
 }
