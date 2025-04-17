@@ -26,4 +26,29 @@ func (r *RingBuffer) Enqueue(item interface{}) error {
 
 	r.buffer[r.head] = item
 	r.head = (r.head + 1) % r.size
+
+	if r.head == r.tail {
+		r.isFull = true
+	}
+	return nil
+}
+
+func (r *RingBuffer) Dequeue() (interface{}, error) {
+	if r.IsEmpty {
+		return nil, errors.New("buffer is empty")
+	}
+
+	item := r.buffer[r.tail]
+	r.tail = (r.tail + 1) % r.size
+	r.isFull = false
+
+	return item, nil
+}
+
+func (r *RingBuffer) IsEmpty() bool {
+	return !r.isFull && r.head == r.tail
+}
+
+func (r *RingBuffer) isFull() bool {
+	return r.IsFull
 }
