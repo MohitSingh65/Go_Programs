@@ -3,6 +3,7 @@ package main
 type DoublyLinkedList struct {
 	Length int
 	head   *Node
+	tail   *Node
 }
 
 type Node struct {
@@ -20,6 +21,7 @@ func (list *DoublyLinkedList) Prepend(item int) {
 	list.Length++
 	if list.head == nil {
 		list.head = node
+		list.tail = node
 	}
 
 	node.Next = list.head
@@ -49,5 +51,13 @@ func (list *DoublyLinkedList) InsertAt(item int, idx int) {
 }
 
 func (list *DoublyLinkedList) Append(item int) {
+	list.Length++
+	node := &Node{Value: item}
 
+	if list.tail == nil {
+		list.head = node
+		list.tail = node
+	}
+	node.Prev = list.tail
+	list.tail.Next = node
 }
