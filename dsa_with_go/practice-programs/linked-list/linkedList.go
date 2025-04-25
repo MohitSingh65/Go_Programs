@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+type DoublyLinkedList struct {
+	Length int
+	head   *Node
+}
 
 type Node struct {
 	Value int
@@ -8,70 +11,43 @@ type Node struct {
 	Next  *Node
 }
 
-func Prepend(head **Node, value int) {
-	newNode := &Node{Value: value, Next: *head}
-	*head = newNode
+func NewDoublyLinkedList() *DoublyLinkedList {
+	return &DoublyLinkedList{}
 }
 
-func printForward(head *Node) {
-	current := head
-	for current != nil {
-		fmt.Printf("%d", current.Value)
-		current = current.Next
+func (list *DoublyLinkedList) Prepend(item int) {
+	node := &Node{Value: item}
+	list.Length++
+	if list.head == nil {
+		list.head = node
 	}
+
+	node.Next = list.head
+	list.head.Prev = node
+	list.head = node
 }
 
-func printBackward(tail *Node) {
-	current := tail
-	for current != nil {
-		fmt.Printf("%d", current.Value)
-		current = current.Prev
+func (list *DoublyLinkedList) InsertAt(item int, idx int) {
+	if idx > list.Length {
+		panic("Oh no!")
+	} else if idx == list.Length {
+		list.Append(item)
+	} else if idx == 0 {
+		list.Prepend(item)
 	}
+	curr := list.head
+	for i := 0; i < idx; i++ {
+		curr = curr.Next
+	}
+
+	node := &Node{Value: item}
+	node.Next = curr
+	node.Prev = curr.Prev
+	curr.Prev.Next = node
+	curr.Prev = node
+	list.Length++
 }
 
-func insertAfter(node *Node, value int) {
-	newNode := &Node{Value: value}
+func (list *DoublyLinkedList) Append(item int) {
 
-	newNode.Next = node.Next
-	newNode.Prev = node
-
-	if node.Next != nil {
-		node.Next.Prev = newNode
-	}
-	node.Next = newNode
-}
-
-func deleteNode(node *Node) {
-	if node.Prev != nil {
-		node.Prev.Next = node.Next
-	}
-	if node.Next != nil {
-		node.Next.Prev = node.Prev
-	}
-}
-
-func main() {
-	head := &Node{Value: 1}
-	second := &Node{Value: 2}
-	third := &Node{Value: 3}
-
-	head.Next = second
-	second.Next = third
-
-	third.Prev = second
-	second.Prev = head
-
-	fmt.Println("Forward traversal:")
-	printForward(head)
-
-	fmt.Println("\nBackward traversal:")
-	printBackward(third)
-
-	insertAfter(second, 4)
-	fmt.Println("\nAfter insertion:")
-	printForward(head)
-
-	deleteNode(second)
-	fmt.Println("\nAfter deletion:")
-	printForward(head)
 }
