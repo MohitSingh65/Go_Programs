@@ -61,3 +61,39 @@ func (list *DoublyLinkedList) Append(item int) {
 	node.Prev = list.tail
 	list.tail.Next = node
 }
+
+func (list *DoublyLinkedList) Remove(item int) int {
+	curr := list.head
+	for i := 0; i < list.Length; i++ {
+		if curr.Value == item {
+			break
+		}
+		curr = curr.Next
+	}
+	if curr == nil {
+		return 0
+	}
+	list.Length--
+
+	if list.Length == 0 {
+		out := list.head.Value
+		list.head = nil
+		list.tail = nil
+		return out
+	}
+
+	if curr.Prev != nil {
+		curr.Prev.Next = curr.Next
+	}
+
+	if curr == list.head {
+		list.head = curr.Next
+	}
+
+	if curr == list.tail {
+		list.tail = curr.Prev
+	}
+
+	removedValue := curr.Value
+	return removedValue
+}
