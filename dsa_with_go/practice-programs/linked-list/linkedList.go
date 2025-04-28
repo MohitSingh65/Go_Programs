@@ -22,6 +22,7 @@ func (list *DoublyLinkedList) Prepend(item int) {
 	if list.head == nil {
 		list.head = node
 		list.tail = node
+		return
 	}
 
 	node.Next = list.head
@@ -34,8 +35,10 @@ func (list *DoublyLinkedList) InsertAt(item int, idx int) {
 		panic("Oh no!")
 	} else if idx == list.Length {
 		list.Append(item)
+		return
 	} else if idx == 0 {
 		list.Prepend(item)
+		return
 	}
 	curr := list.head
 	for i := 0; i < idx; i++ {
@@ -57,9 +60,11 @@ func (list *DoublyLinkedList) Append(item int) {
 	if list.tail == nil {
 		list.head = node
 		list.tail = node
+		return
 	}
 	node.Prev = list.tail
 	list.tail.Next = node
+	list.tail = node
 }
 
 func (list *DoublyLinkedList) Remove(item int) int {
