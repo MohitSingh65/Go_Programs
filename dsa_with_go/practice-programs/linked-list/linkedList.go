@@ -1,5 +1,9 @@
 package main
 
+import (
+	"fmt"
+)
+
 type DoublyLinkedList struct {
 	Length int
 	head   *Node
@@ -48,7 +52,7 @@ func (list *DoublyLinkedList) InsertAt(item int, idx int) {
 	node := &Node{Value: item}
 	node.Next = curr
 	node.Prev = curr.Prev
-	curr.Prev.Next = node
+	node.Prev.Next = node
 	curr.Prev = node
 	list.Length++
 }
@@ -141,4 +145,61 @@ func (list *DoublyLinkedList) getAt(idx int) *Node {
 		curr = curr.Next
 	}
 	return curr
+}
+
+func (list *DoublyLinkedList) Print() {
+	fmt.Print("List: ")
+	for curr := list.head; curr != nil; curr = curr.Next {
+		fmt.Printf("%d ", curr.Value)
+	}
+	fmt.Println()
+}
+
+func (list *DoublyLinkedList) PrintReverse() {
+	fmt.Print("Reverse: ")
+	for curr := list.tail; curr != nil; curr = curr.Prev {
+		fmt.Printf("%d ", curr.Value)
+	}
+	fmt.Println()
+}
+
+func main() {
+	list := NewDoublyLinkedList()
+
+	// Append values
+	list.Append(10)
+	list.Append(20)
+	list.Append(30)
+	fmt.Println("After appending 10, 20, 30:")
+	list.Print()        // List: 10 20 30
+	list.PrintReverse() // Reverse: 30 20 10
+
+	// Prepend a value
+	list.Prepend(5)
+	fmt.Println("\nAfter prepending 5:")
+	list.Print()        // List: 5 10 20 30
+	list.PrintReverse() // Reverse: 30 20 10 5
+
+	// Insert at position
+	list.InsertAt(15, 2)
+	fmt.Println("\nAfter inserting 15 at index 2:")
+	list.Print()        // List: 5 10 15 20 30
+	list.PrintReverse() // Reverse: 30 20 15 10 5
+
+	// Remove a value
+	removed := list.Remove(20)
+	fmt.Printf("\nRemoved: %d\n", removed)
+	list.Print() // List: 5 10 15 30
+
+	// Get value at index
+	value := list.Get(2)
+	fmt.Printf("\nValue at index 2: %d\n", value) // 15
+
+	// Remove at index
+	list.RemoveAt(0)
+	fmt.Println("\nAfter removing index 0:")
+	list.Print()        // List: 10 15 30
+	list.PrintReverse() // Reverse: 30 15 10
+
+	fmt.Printf("\nFinal Length: %d\n", list.Length) // Final Length: 3
 }
