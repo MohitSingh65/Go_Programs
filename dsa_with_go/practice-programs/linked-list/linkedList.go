@@ -102,3 +102,43 @@ func (list *DoublyLinkedList) Remove(item int) int {
 	removedValue := curr.Value
 	return removedValue
 }
+
+func (list *DoublyLinkedList) Get(idx int) int {
+	node := list.getAt(idx)
+	if node == nil {
+		panic("Index out of bounds")
+	}
+	return node.Value
+}
+
+func (list *DoublyLinkedList) RemoveAt(idx int) {
+	node := list.getAt(idx)
+	if node == nil {
+		return
+	}
+
+	if node.Prev != nil {
+		node.Prev.Next = node.Next
+	} else {
+		list.head = node.Next
+	}
+
+	if node.Next != nil {
+		node.Next.Prev = node.Prev
+	} else {
+		list.tail = node.Prev
+	}
+
+	list.Length--
+}
+
+func (list *DoublyLinkedList) getAt(idx int) *Node {
+	if idx < 0 || idx >= list.Length {
+		return nil
+	}
+	curr := list.head
+	for i := 0; i < idx; i++ {
+		curr = curr.Next
+	}
+	return curr
+}
