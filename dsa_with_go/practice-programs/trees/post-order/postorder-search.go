@@ -15,17 +15,17 @@ func walk(curr *Node, path []int) []int {
 		return path
 	}
 	// pre
-	path = append(path, curr.Value)
 
 	// recurse
 	walk(curr.Left, path)
 	walk(curr.Right, path)
 
 	// post
+	path = append(path, curr.Value)
 	return path
 }
 
-func Pre_order_traversal(head *Node) []int {
+func post_order_traversal(head *Node) []int {
 
 	return walk(head, []int{})
 }
