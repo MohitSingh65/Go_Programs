@@ -29,6 +29,13 @@ func NewLRU[K comparable, V any](capacity int) *LRU[K, V] {
 }
 
 func (c *LRU[K, V]) update(key K, value V) {
+	node := c.lookup[key]
+	if node == nil {
+		node = createNode(value)
+	} else {
+		c.detach(node)
+		c.prepend(node)
+	}
 }
 
 func (c *LRU[K, V]) get(key K) (V, bool) {
@@ -37,5 +44,14 @@ func (c *LRU[K, V]) get(key K) (V, bool) {
 		var zero V
 		return zero, false
 	}
+	c.detach(node)
+	c.prepend(node)
+
 	return node.value, true
+}
+
+func (c *LRU[K, V]) detach(node *Node[V]) {
+}
+
+func (c *LRU[K, V]) prepend(node *Node[V]) {
 }
