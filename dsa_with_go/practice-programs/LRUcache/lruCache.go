@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type Node[V any] struct {
 	value V
 	next  *Node[V]
@@ -15,7 +17,7 @@ type LRU[K comparable, V any] struct {
 	head          *Node[V]
 	tail          *Node[V]
 	lookup        map[K]*Node[V]
-	reverseLookup map[*Node[V]]*K
+	reverseLookup map[*Node[V]]K
 	capacity      int
 }
 
@@ -25,7 +27,8 @@ func NewLRU[K comparable, V any](capacity int) *LRU[K, V] {
 		head:          nil,
 		tail:          nil,
 		lookup:        make(map[K]*Node[V]),
-		reverseLookup: make(map[*Node[V]]*K),
+		reverseLookup: make(map[*Node[V]]K),
+		capacity:      capacity,
 	}
 }
 
@@ -37,8 +40,7 @@ func (c *LRU[K, V]) update(key K, value V) {
 		c.prepend(node)
 		c.trimCache()
 		c.lookup[key] = node
-		c.reverseLookup[node] = &key
-		node.value = value
+		c.reverseLookup[node] = key
 	} else {
 		c.detach(node)
 		c.prepend(node)
@@ -84,7 +86,7 @@ func (c *LRU[K, V]) detach(node *Node[V]) {
 
 func (c *LRU[K, V]) prepend(node *Node[V]) {
 	if c.head == nil {
-		c.head = c.tail
+		c.head = node
 		c.tail = node
 		return
 	}
@@ -102,11 +104,33 @@ func (c *LRU[K, V]) trimCache() {
 	tail := c.tail
 	c.detach(c.tail)
 
+	if tail == nil {
+		return
+	}
 	key, ok := c.reverseLookup[tail]
 	if !ok {
 		return
 	}
-	delete(c.lookup, *key)
+	delete(c.lookup, key)
 	delete(c.reverseLookup, tail)
 	c.length--
+}
+
+func main() {
+	cap := 2
+	cache := NewLRU[string, int](cap)
+
+	cache.update("one", 1)
+	cache.update("two", 2)
+
+	val, ok := cache.get("one")
+	fmt.Println(val, ok)
+
+	cache.update("three", 3)
+
+	val, ok = cache.get("two")
+	fmt.Println(val, ok)
+
+	val, ok = cache.get("three")
+	fmt.Println(val, ok)
 }
